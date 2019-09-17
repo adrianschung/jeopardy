@@ -1,0 +1,6 @@
+<p><strong><%= current_question.description %></strong> - <%= current_question.value %></p>
+
+<%= form_for [current_game, current_question], method: :patch do |f| %>
+  <%= f.collection_select :answer, Answer.all, :id, :description, {include_blank: ''}, {style:"width:500px;"} %>
+  <%= f.submit :Submit %>
+<% end%>

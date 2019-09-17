@@ -1,0 +1,5 @@
+<% @questions.each do |q| %>
+  <li>
+    <%= link_to q.description, question_path(q) %>
+  </li>
+<% end %>
