@@ -1,11 +1,21 @@
 <% current_game.categories.each do |category| %>
   <div class="category">
     <h2><%= category.name %></h2>
-    <% category.questions.each do |question| %>
-      <% if current_answered_ids.include?(question.id) || current_game.answerer_id != current_user.id %>
-        <p><del><%= question.value %> - <%= question.description %></del></p>
-      <% else %>
-        <p><%= question.value %> - <%= link_to question.description, game_select_path(current_game, question_id: question.id), method: :patch %></p>
+    <% if current_game.answerer_id != current_user.id %>
+      <% category.questions.each do |question| %>
+        <% if current_answered_ids.include?(question.id) %>
+          <p><del><%= question.value %> - <%= question.description %></del></p>
+        <% else %>
+          <p><%= question.value %> - <%= question.description %></p>
+        <% end %>
+      <% end %>
+    <% else %>
+      <% category.questions.each do |question| %>
+        <% if current_answered_ids.include?(question.id) %>
+          <p><del><%= question.value %> - <%= question.description %></del></p>
+        <% else %>
+          <p><%= question.value %> - <%= link_to question.description, game_select_path(current_game, question_id: question.id), method: :patch %></p>
+        <% end %>
       <% end %>
     <% end %>
   </div>

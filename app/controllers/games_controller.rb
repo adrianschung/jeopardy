@@ -42,7 +42,7 @@ class GamesController < ApplicationController
 
   def start
     Jeopardy::CreateGame.call(current_game_id)
-    current_game_id.update(status: 'selecting')
+    current_game_id.update(status: 'selecting', answerer_id: current_user.id)
     redirect_to game_path(current_game_id)
   end
 
