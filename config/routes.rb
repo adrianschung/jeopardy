@@ -9,6 +9,9 @@ Rails.application.routes.draw do
   resources :games do
     patch 'join'
     patch 'start'
+    patch 'select'
+    patch 'buzz'
+    patch 'answer'
     resources :questions
   end
   root "games#index"

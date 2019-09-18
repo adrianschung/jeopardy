@@ -2,10 +2,10 @@
   <div class="category">
     <h2><%= category.name %></h2>
     <% category.questions.each do |question| %>
-      <% if current_answered_ids.include?(question.id) %>
+      <% if current_answered_ids.include?(question.id) || current_game.answerer_id != current_user.id %>
         <p><del><%= question.value %> - <%= question.description %></del></p>
       <% else %>
-        <p><%= question.value %> - <%= link_to question.description, game_question_path(current_game, question) %></p>
+        <p><%= question.value %> - <%= link_to question.description, game_select_path(current_game, question_id: question.id), method: :patch %></p>
       <% end %>
     <% end %>
   </div>

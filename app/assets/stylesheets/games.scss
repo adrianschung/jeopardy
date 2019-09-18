@@ -6,3 +6,9 @@
   display: inline-block;
   width: 19%;
 }
+
+.select2-results {
+  .select2-no-results {
+    display: none;
+  }
+}

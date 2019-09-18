@@ -1,0 +1,13 @@
+<div>
+  <%= current_game.question.description %>
+</div>
+<% if current_game.answerer_id.nil? %>
+  <%= link_to "BUZZ BUZZ", game_buzz_path(current_game), method: :patch %>
+<% elsif current_game.answerer == current_user %>
+  <%= form_tag game_answer_path(current_game), method: :patch do %>
+    <%= collection_select :game, :answer, Answer.all, :id, :description, {include_blank: ''}, {style:"width:500px;"} %>
+    <%= submit_tag :Submit %>
+  <% end%>
+<% else %>
+  <p><%= current_game.answerer.name %> is answering.</p>
+<% end %>

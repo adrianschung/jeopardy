@@ -24,22 +24,45 @@ class GamesController < ApplicationController
   end
 
   def join
-    game = Game.find(params[:game_id])
-    game.game_users.new(user: current_user)
-    if game.save
+    current_game_id.game_users.new(user: current_user)
+    if current_game_id.save
       flash[:notice] = "Joined game."
-      redirect_to game_path(game)
+      redirect_to game_path(current_game_id)
     else
       flash[:alert] = "Unable to join game."
       redirect_to games_path
     end
   end
 
+  def select
+    question = params[:question_id]
+    current_game_id.update(status: 'answering', answerer_id: nil, question_id: question)
+    redirect_to game_path(current_game_id)
+  end
+
   def start
-    game = Game.find(params[:game_id])
-    Jeopardy::CreateGame.call(game)
-    game.update(status: 'selecting')
-    redirect_to game_path(game)
+    Jeopardy::CreateGame.call(current_game_id)
+    current_game_id.update(status: 'selecting')
+    redirect_to game_path(current_game_id)
+  end
+
+  def buzz
+    if current_game_id.answerer_id.nil?
+      current_game_id.update(answerer_id: current_user.id)
+    end
+    redirect_to game_path(current_game_id)
+  end
+
+  def answer
+    question = current_game_id.question
+    if question.answer.id.to_s == params[:game][:answer]
+      current_game.answered_questions.create(question: question)
+      current_game.update(status: 'selecting', question_id: nil)
+      redirect_to game_path(current_game_id)
+    else
+      current_game.update(answerer_id: nil)
+      redirect_to game_path(current_game_id)
+    end
   end
 
   private
@@ -55,5 +78,10 @@ class GamesController < ApplicationController
 
   def current_game
     @game ||= Game.find(params[:id])
+    @game ||= Game.find(params[:game_id])
+  end
+
+  def current_game_id
+    @game ||= Game.find(params[:game_id])
   end
 end
