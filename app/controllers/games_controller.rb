@@ -1,7 +1,7 @@
 class GamesController < ApplicationController
-
   def index
-    @games = Game.all
+    @games = Game.where(status: [0, 1])
+    @my_games = current_user.games
   end
 
   def show
@@ -15,6 +15,7 @@ class GamesController < ApplicationController
     @game = Game.new(game_params)
     if @game.save
       @game.game_users.create(user: current_user)
+      @game.update(excluded: {ids:[]})
       flash[:notice] = "Game created!"
       redirect_to game_path(@game)
     else
@@ -58,10 +59,11 @@ class GamesController < ApplicationController
     points = question.value
     if question.answer.id.to_s == params[:game][:answer]
       current_game.answered_questions.create(question: question)
-      current_game.update(status: 'selecting', question_id: nil)
+      current_game.update(status: 'selecting', question_id: nil, excluded: {ids:[]})
       current_game.game_users.where(user:current_user).first.increment!(:points, points )
       redirect_to game_path(current_game_id)
     else
+      exclude_user
       current_game.update(answerer_id: nil)
       redirect_to game_path(current_game_id)
     end
@@ -85,5 +87,15 @@ class GamesController < ApplicationController
 
   def current_game_id
     @game ||= Game.find(params[:game_id])
+  end
+
+  def exclude_user
+    excluded_ids = current_game.excluded['ids']
+    excluded_ids << current_user.id
+    current_game.update(excluded: {ids: excluded_ids})
+  end
+
+  def excluded_ids
+    current_game.excluded['ids']
   end
 end

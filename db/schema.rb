@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_18_184319) do
+ActiveRecord::Schema.define(version: 2019_09_18_190258) do
 
   create_table "answered_questions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "game_id"
@@ -54,6 +54,7 @@ ActiveRecord::Schema.define(version: 2019_09_18_184319) do
     t.integer "status"
     t.integer "answerer_id"
     t.integer "question_id"
+    t.json "excluded"
   end
 
   create_table "questions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
