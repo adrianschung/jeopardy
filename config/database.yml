@@ -48,7 +48,7 @@ test:
 #     url: <%= ENV['DATABASE_URL'] %>
 #
 production:
-  <<: *default
+  adapter: postgresql
+  encoding: unicode
   database: jeopardy_production
-  username: jeopardy
-  password: <%= ENV['JEOPARDY_DATABASE_PASSWORD'] %>
+  pool: 5
