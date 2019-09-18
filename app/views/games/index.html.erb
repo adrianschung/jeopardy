@@ -3,3 +3,7 @@
 <% @games.each do |game| %>
   <li><%= link_to game.name, game_path(game) %></li>
 <% end %>
+<h1>My Games</h1>
+<% @my_games.each do |game| %>
+  <li><%= link_to game.name, game_path(game) %></li>
+<% end %>

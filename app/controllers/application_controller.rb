@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   helper_method :current_user
+  before_action :authenticate_user
   
   def current_user
     if session[:user_id]
@@ -8,5 +9,11 @@ class ApplicationController < ActionController::Base
     else
       @current_user = nil
     end
+  end
+
+  def authenticate_user
+    return if current_user
+    flash[:alert] = "Sign up or Log in before continuing"
+    redirect_to login_path
   end
 end
