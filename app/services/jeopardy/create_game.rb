@@ -1,13 +1,13 @@
 module Jeopardy
   class CreateGame < ApplicationService
 
-    def initialize(name)
-      @name = name
+    def initialize(game)
+      @game = game
     end
 
     def call
       get_categories
-      create_game
+      create_game_categories
     end
 
     private
@@ -16,8 +16,7 @@ module Jeopardy
       @ids = Category.pluck(:id).shuffle[0..4]
     end
 
-    def create_game
-      @game = Game.create(name: @name)
+    def create_game_categories
       @ids.each{ |id| @game.game_categories.create(category_id: id) }
     end
   end

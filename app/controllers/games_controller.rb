@@ -35,6 +35,13 @@ class GamesController < ApplicationController
     end
   end
 
+  def start
+    game = Game.find(params[:game_id])
+    Jeopardy::CreateGame.call(game)
+    game.update(status: 'selecting')
+    redirect_to game_path(game)
+  end
+
   private
   helper_method :current_answered_ids, :current_game
 

@@ -1,0 +1,12 @@
+<% current_game.categories.each do |category| %>
+  <div class="category">
+    <h2><%= category.name %></h2>
+    <% category.questions.each do |question| %>
+      <% if current_answered_ids.include?(question.id) %>
+        <p><del><%= question.value %> - <%= question.description %></del></p>
+      <% else %>
+        <p><%= question.value %> - <%= link_to question.description, game_question_path(current_game, question) %></p>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>

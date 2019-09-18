@@ -1,28 +1,25 @@
 <p><%= link_to '< Back', games_path %></p>
-<div>
-  <% if current_game.status == "waiting" && !current_game.users.include?(current_user) %>
-    <%= link_to "Join", game_join_path(current_game), method: :patch %>
-  <% elsif current_game.status == "waiting" %>
-    <p>Waiting for players (<%= current_game.users.count %>/3)</p>
-  <% elsif current_game.status == "full" %>
-    <p>Waiting to start</p>
-  <% end %>
-</div>
+<% if current_game.status == "waiting" || current_game.status == "full" %>
+  <div>
+    <% if current_game.status == "waiting" && !current_game.users.include?(current_user) %>
+      <%= link_to "Join", game_join_path(current_game), method: :patch %>
+    <% elsif current_game.status == "waiting" %>
+      <p>Waiting for players (<%= current_game.users.count %>/3)</p>
+    <% elsif current_game.status == "full" %>
+      <p>Waiting to start</p>
+      <% if current_game.first_user == current_user %>
+        <%= link_to 'Start', game_start_path(current_game), method: :patch %>
+      <% end %>
+    <% end %>
+  </div>
+<% elsif current_game.status == 'selecting' %>
+  <%= render 'board' %>
+<% elsif current_game.status == 'answering' %>
+  <%= render 'question' %>
+<% end %>
 <div>
   <h3>Players</h3>
   <% current_game.users.each do |user| %>
     <li><%= user.name %></li>
   <% end %>
 </div>
-<% current_game.categories.each do |category| %>
-  <div class="category">
-    <h2><%= category.name %></h2>
-    <% category.questions.each do |question| %>
-      <% if current_answered_ids.include?(question.id) %>
-        <p><del><%= question.value %> - <%= question.description %></del></p>
-      <% else %>
-        <p><%= question.value %> - <%= link_to question.description, game_question_path(current_game, question) %></p>
-      <% end %>
-    <% end %>
-  </div>
-<% end %>
