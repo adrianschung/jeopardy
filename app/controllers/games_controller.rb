@@ -55,9 +55,11 @@ class GamesController < ApplicationController
 
   def answer
     question = current_game_id.question
+    points = question.value
     if question.answer.id.to_s == params[:game][:answer]
       current_game.answered_questions.create(question: question)
       current_game.update(status: 'selecting', question_id: nil)
+      current_game.game_users.where(user:current_user).first.increment!(:points, points )
       redirect_to game_path(current_game_id)
     else
       current_game.update(answerer_id: nil)
