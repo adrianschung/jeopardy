@@ -67,8 +67,14 @@ class GamesController < ApplicationController
       ActionCable.server.broadcast("game_#{current_game.id}", action: 'answered', user: current_user.id, question: question.id, points: points_hash)
     else
       exclude_user
-      current_game.update(answerer_id: nil)
-      ActionCable.server.broadcast("game_#{current_game.id}", action: 'select', question: question.description, ids: current_game.excluded['ids'])
+      if current_game.excluded['ids'].count == 3
+        current_game.answered_questions.create(question: question)
+        current_game.update(status: 'selecting', question_id: nil, excluded: {ids:[]})
+        ActionCable.server.broadcast("game_#{current_game.id}", action: 'answered', user: current_user.id, question: question.id)
+      else
+        current_game.update(answerer_id: nil)
+        ActionCable.server.broadcast("game_#{current_game.id}", action: 'select', question: question.description, ids: current_game.excluded['ids'])
+      end
     end
   end
 
