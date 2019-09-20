@@ -1,15 +1,13 @@
-<div>
-  <%= current_game.question.description %>
-</div>
-<% if current_game.answerer_id.nil? && current_game.excluded["ids"].exclude?(current_user.id) %>
-  <%= link_to "BUZZ BUZZ", game_buzz_path(current_game), method: :patch %>
-<% elsif current_game.excluded["ids"].include?(current_user.id) %>
-  <p>You have already answered.</p>
-<% elsif current_game.answerer == current_user %>
+<h2 id="current-question" class="board" style="display:none">
+  Question description
+</h2>
+
+<div id="answer-form" class="board" style="display:none">
   <%= form_tag game_answer_path(current_game), method: :patch do %>
     <%= collection_select :game, :answer, Answer.all, :id, :description, {include_blank: ''}, {style:"width:500px;"} %>
-    <%= submit_tag :Submit %>
+    <%= submit_tag :Submit, data: { disable_with: false } %>
   <% end%>
-<% else %>
-  <p><%= current_game.answerer.name %> is answering.</p>
-<% end %>
+</div>
+<div id="answer-waiting" class="board" style="display:none">
+  <span id="answer-name">Someone</span> is answering.
+</div>

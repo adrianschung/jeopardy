@@ -15,4 +15,5 @@ Rails.application.routes.draw do
     resources :questions
   end
   root "games#index"
+  mount ActionCable.server => '/cable'
 end

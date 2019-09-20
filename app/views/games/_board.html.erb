@@ -1,22 +1,23 @@
-<% current_game.categories.each do |category| %>
-  <div class="category">
-    <h2><%= category.name %></h2>
-    <% if current_game.answerer_id != current_user.id %>
+<div id="board" class="board" style="display:none">  
+  <% current_game.categories.each do |category| %>
+    <div class="category">
+      <h2><%= category.name %></h2>
       <% category.questions.each do |question| %>
-        <% if current_answered_ids.include?(question.id) %>
-          <p><del><%= question.value %> - <%= question.description %></del></p>
-        <% else %>
-          <p><%= question.value %> - <%= question.description %></p>
-        <% end %>
+        <p class="question-<%= question.id %>"><%= question.value %></p>
       <% end %>
-    <% else %>
+    </div>
+  <% end %>
+  <p id='selecting'>Waiting for selection.</p>
+</div>
+
+<div id="selection-board" class="board" style="display:none">
+  <% current_game.categories.each do |category| %>
+    <div class="category">
+      <h2><%= category.name %></h2>
       <% category.questions.each do |question| %>
-        <% if current_answered_ids.include?(question.id) %>
-          <p><del><%= question.value %> - <%= question.description %></del></p>
-        <% else %>
-          <p><%= question.value %> - <%= link_to question.description, game_select_path(current_game, question_id: question.id), method: :patch %></p>
-        <% end %>
+        <p class="question-<%= question.id %>"><%= link_to question.value, game_select_path(current_game, question_id: question.id), id: question.id, method: :patch, disabled: true %></p>
       <% end %>
-    <% end %>
-  </div>
-<% end %>
+    </div>
+  <% end %>
+  <p id='selecting'>Please select a question</p>
+</div>

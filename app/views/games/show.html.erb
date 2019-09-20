@@ -1,25 +1,23 @@
 <p><%= link_to '< Back', games_path %></p>
-<% if current_game.status == "waiting" || current_game.status == "full" %>
-  <div>
-    <% if current_game.status == "waiting" && !current_game.users.include?(current_user) %>
-      <%= link_to "Join", game_join_path(current_game), method: :patch %>
-    <% elsif current_game.status == "waiting" %>
-      <p>Waiting for players (<%= current_game.users.count %>/3)</p>
-    <% elsif current_game.status == "full" %>
-      <p>Waiting to start</p>
-      <% if current_game.first_user == current_user %>
-        <%= link_to 'Start', game_start_path(current_game), method: :patch %>
-      <% end %>
+<div id='game-box' data-channel-subscribe='game' data-game-id='<%= current_game.id %>'>
+  <% if current_game.status == "waiting" && !current_game.users.include?(current_user) %>
+    <%= link_to "Join", game_join_path(current_game), method: :patch %>
+  <% elsif current_game.status == "waiting" %>
+    <p>Waiting for players (<%= current_game.users.count %>/3)</p>
+  <% elsif current_game.status == "full" %>
+    <p>Waiting to start</p>
+    <% if current_game.first_user == current_user %>
+      <%= link_to 'Start', game_start_path(current_game), method: :patch %>
     <% end %>
-  </div>
-<% elsif current_game.status == 'selecting' %>
-  <%= render 'board' %>
-<% elsif current_game.status == 'answering' %>
-  <%= render 'question' %>
-<% end %>
+  <% end %>
+</div>
+<%= render 'board' %>
+<%= render 'question' %>
+<%= render 'buzzer' %>
 <div>
   <h3>Players</h3>
   <% current_game.game_users.each do |user| %>
-    <li><%= user.user.name %> - <%= user.points %></li>
+    <li><%= user.user.name %> - <span class='points-<%= user.user_id %>'>0</span></li>
   <% end %>
 </div>
+<input type="hidden" id="user" data-id="<%= current_user.id %>">
