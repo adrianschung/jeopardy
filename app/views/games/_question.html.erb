@@ -1,6 +1,10 @@
-<h2 id="current-question" class="board" style="display:none">
-  Question description
+<h2 id="current-category" class="board" style="display:none">
+  Category title
 </h2>
+
+<h3 id="current-question" class="board" style="display:none">
+  Question description
+</h3>
 
 <div id="answer-form" class="board" style="display:none">
   <%= form_tag game_answer_path(current_game), method: :patch do %>

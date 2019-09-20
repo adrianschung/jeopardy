@@ -1,0 +1,12 @@
+<h3>Players</h3>
+<p id="waiting-box">
+  <% if current_game.users.count < 3 %>
+    <span id="waiting-text">Waiting for players</span>
+  <% else %>
+    <span id="waiting-text">Waiting to start</span>
+  <% end %>
+   - <span id="waiting-count">(<%= current_game.users.count %>/3)</span>
+</p>
+<% current_game.game_users.each do |user| %>
+  <li><%= user.user.name %> - <span class='points-<%= user.user_id %>'>0</span></li>
+<% end %>

@@ -26,10 +26,12 @@ class GamesController < ApplicationController
   end
 
   def join
-    current_game_id.game_users.new(user: current_user)
-    if current_game_id.save
+    current_game.game_users.new(user: current_user)
+    if current_game.save
       flash[:notice] = "Joined game."
-      redirect_to game_path(current_game_id)
+      ActionCable.server.broadcast("game_#{current_game.id}", action: 'join', html: render_players)
+      ActionCable.server.broadcast("game_#{current_game.id}", action: 'full') if current_game.users.count == 3
+      redirect_to game_path(current_game)
     else
       flash[:alert] = "Unable to join game."
       redirect_to games_path
@@ -37,25 +39,26 @@ class GamesController < ApplicationController
   end
 
   def start
-    current_game_id.update(status: 'selecting', answerer_id: current_user.id)
+    current_game.update(status: 'selecting', answerer_id: current_user.id)
     ActionCable.server.broadcast("game_#{current_game.id}", action: 'start', user: current_user.id)
   end
 
   def select
     question = Question.find(params[:question_id])
-    current_game_id.update(status: 'answering', answerer_id: nil, question_id: question.id)
-    ActionCable.server.broadcast("game_#{current_game.id}", action: 'select', question: question.description, ids: [])
+    category = question.category
+    current_game.update(status: 'answering', answerer_id: nil, question_id: question.id)
+    ActionCable.server.broadcast("game_#{current_game.id}", action: 'select', category: category.name, question: question.description, ids: [])
   end
 
   def buzz
-    if current_game_id.answerer_id.nil?
-      current_game_id.update(answerer_id: current_user.id)
+    if current_game.answerer_id.nil?
+      current_game.update(answerer_id: current_user.id)
       ActionCable.server.broadcast("game_#{current_game.id}", action: 'buzz', user: current_user.id, name: current_user.name)
     end
   end
 
   def answer
-    question = current_game_id.question
+    question = current_game.question
     points = question.value
     if question.answer.id.to_s == params[:game][:answer]
       current_game.answered_questions.create(question: question)
@@ -65,12 +68,16 @@ class GamesController < ApplicationController
     else
       exclude_user
       current_game.update(answerer_id: nil)
-      ActionCable.server.broadcast("game_#{current_game_id.id}", action: 'select', question: question.description, ids: current_game_id.excluded['ids'])
+      ActionCable.server.broadcast("game_#{current_game.id}", action: 'select', question: question.description, ids: current_game.excluded['ids'])
     end
   end
 
   private
   helper_method :current_answered_ids, :current_game
+
+  def render_players
+    ApplicationController.render(partial: 'games/players', locals: {current_game: current_game})
+  end
 
   def game_params
     params.require(:game).permit(:name)
@@ -81,11 +88,7 @@ class GamesController < ApplicationController
   end
 
   def current_game
-    @game ||= Game.find(params[:id])
-    @game ||= Game.find(params[:game_id])
-  end
-
-  def current_game_id
+    @game ||= Game.find(params[:id]) rescue nil
     @game ||= Game.find(params[:game_id])
   end
 

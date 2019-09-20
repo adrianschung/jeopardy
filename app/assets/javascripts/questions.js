@@ -27,8 +27,9 @@ function questionAnswered(id, questionId = '', points = undefined) {
   displayBoard(id);
 }
 
-function displayQuestion(description) {
+function displayQuestion(category, description) {
   resetBoard();
+  $('#current-category').text(category).show();
   $('#current-question').text(description).show();
 }
 
