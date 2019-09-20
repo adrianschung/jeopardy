@@ -18,6 +18,7 @@ class ApplicationController < ActionController::Base
   end
 
   def fetch_user(id)
+    return nil unless id
     User.find_by_id(id) || reset_session
   end
 
