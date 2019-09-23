@@ -1,17 +1,19 @@
-<h2 id="current-category" class="board" style="display:none">
+<h2 id="current-category" class="board" style="display:<%= ["selected", "answering"].include?(current_game.status) ? 'block' : 'none'%>">
   Category title
 </h2>
 
-<h3 id="current-question" class="board" style="display:none">
-  Question description
-</h3>
+<div id="question-box" style="display:<%= ["selected", "answering"].include?(current_game.status) ? 'block' : 'none'%>">
+  <h3 id="current-question" class="hidden board">
+    <%= current_game.question_id ? current_game.question.description : "&nbsp" %>
+  </h3>
+</div>
 
-<div id="answer-form" class="board" style="display:none">
+<div id="answer-form" class="board" style="display:<%= current_game.answerer_id == current_user.id ? 'block' : 'none' %>">
   <%= form_tag game_answer_path(current_game), method: :patch, remote: true do %>
     <%= collection_select :game, :answer, Answer.all, :id, :description, {include_blank: ''}, {style:"width:500px;"} %>
     <%= submit_tag :Submit, data: { disable_with: false } %>
   <% end%>
 </div>
-<div id="answer-waiting" class="board" style="display:none">
+<div id="answer-waiting" class="board" style="display:<%= someone_answering %>">
   <span id="answer-name">Someone</span> is answering.
 </div>

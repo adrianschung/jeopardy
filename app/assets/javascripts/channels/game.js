@@ -13,9 +13,10 @@ $(document).on('turbolinks:load', function() {
       displayBoard(data.user);
     } else if (data.action == 'select') {
       displayQuestion(data.category, data.question);
-      resetBuzzer(data.ids)
     } else if (data.action == 'buzz') {
       resetAnswering(data.user, data.name);
+    } else if (data.action == 'reset') {
+      resetBuzzer(data.ids);
     } else if (data.action == 'answered') {
       questionAnswered(data.user, data.question, data.points)
     }

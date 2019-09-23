@@ -1,10 +1,11 @@
 class Game < ApplicationRecord
   has_many :answered_questions
+  has_many :questions, through: :answered_questions
   has_many :game_categories, dependent: :destroy
   has_many :categories, through: :game_categories
   has_many :game_users
   has_many :users, through: :game_users
-  enum status: [:waiting, :full, :selecting, :answering, :finished]
+  enum status: [:waiting, :full, :selecting, :selected, :answering, :finished]
   after_create :set_waiting
   
   def answered_ids

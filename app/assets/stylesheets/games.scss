@@ -12,8 +12,19 @@
   }
 }
 
+.hidden {
+  overflow: hidden;
+  white-space: nowrap;
+}
+
 .select2-results {
   .select2-no-results {
     display: none;
   }
+}
+
+#question-box {
+  position: relative;
+  height: 50px;
+  width: 100%;
 }

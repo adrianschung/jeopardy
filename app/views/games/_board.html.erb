@@ -15,7 +15,11 @@
     <div class="category">
       <h2><%= category.name %></h2>
       <% category.questions.each do |question| %>
-        <p class="question-<%= question.id %>"><%= link_to question.value, game_select_path(current_game, question_id: question.id), id: question.id, method: :patch, remote: true %></p>
+        <p class="question-<%= question.id %>">
+          <% unless current_game.questions.include?(question) %>
+            <%= link_to question.value, game_select_path(current_game, question_id: question.id), id: question.id, method: :patch, remote: true %>
+          <% end %>
+        </p>
       <% end %>
     </div>
   <% end %>

@@ -46,13 +46,13 @@ class GamesController < ApplicationController
   def select
     question = Question.find(params[:question_id])
     category = question.category
-    current_game.update(status: 'answering', answerer_id: nil, question_id: question.id)
+    current_game.update(status: 'selected', answerer_id: nil, question_id: question.id)
     ActionCable.server.broadcast("game_#{current_game.id}", action: 'select', category: category.name, question: question.description, ids: [])
   end
 
   def buzz
     if current_game.answerer_id.nil?
-      current_game.update(answerer_id: current_user.id)
+      current_game.update(status: 'answering', answerer_id: current_user.id)
       ActionCable.server.broadcast("game_#{current_game.id}", action: 'buzz', user: current_user.id, name: current_user.name)
     end
   end
@@ -73,7 +73,7 @@ class GamesController < ApplicationController
         ActionCable.server.broadcast("game_#{current_game.id}", action: 'answered', user: current_user.id, question: question.id)
       else
         current_game.update(answerer_id: nil)
-        ActionCable.server.broadcast("game_#{current_game.id}", action: 'select', question: question.description, ids: current_game.excluded['ids'])
+        ActionCable.server.broadcast("game_#{current_game.id}", action: 'reset', ids: current_game.excluded['ids'])
       end
     end
   end

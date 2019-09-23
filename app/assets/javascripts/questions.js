@@ -27,10 +27,12 @@ function questionAnswered(id, questionId = '', points = undefined) {
   displayBoard(id);
 }
 
-function displayQuestion(category, description) {
+function displayQuestion(category) {
   resetBoard();
+  $('#buzzer').show();
   $('#current-category').text(category).show();
-  $('#current-question').text(description).show();
+  $('#question-box #current-question').show();
+  revealQuestion(moveCover);
 }
 
 function resetBuzzer(excludedIds = []) {
@@ -40,9 +42,11 @@ function resetBuzzer(excludedIds = []) {
   } else {
     $('#buzzer').show();
   }
+  moveCover();;
 }
 
 function resetAnswering(id = '', name = 'someone') {
+  $('#current-question').stop();
   hideBuzzer();
   $('#answer-name').text(name);
   if (id == userId) {
@@ -58,6 +62,15 @@ function resetBoard() {
 
 function removeQuestion(questionId) {
   $('.question-' + questionId).html("");
+}
+
+function revealQuestion(callback) {
+  $('#current-question').width('0');
+  callback();
+}
+
+function moveCover() {
+  $('#current-question').animate({width:'100%'}, 5000);
 }
 
 function hideBuzzer() {
