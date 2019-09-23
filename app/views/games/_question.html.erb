@@ -7,7 +7,7 @@
 </h3>
 
 <div id="answer-form" class="board" style="display:none">
-  <%= form_tag game_answer_path(current_game), method: :patch do %>
+  <%= form_tag game_answer_path(current_game), method: :patch, remote: true do %>
     <%= collection_select :game, :answer, Answer.all, :id, :description, {include_blank: ''}, {style:"width:500px;"} %>
     <%= submit_tag :Submit, data: { disable_with: false } %>
   <% end%>

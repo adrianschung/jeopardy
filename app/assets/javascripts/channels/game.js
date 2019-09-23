@@ -17,7 +17,6 @@ $(document).on('turbolinks:load', function() {
     } else if (data.action == 'buzz') {
       resetAnswering(data.user, data.name);
     } else if (data.action == 'answered') {
-      console.log(data.points)
       questionAnswered(data.user, data.question, data.points)
     }
   }

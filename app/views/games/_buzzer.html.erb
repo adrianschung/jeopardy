@@ -1,5 +1,5 @@
 <div id="buzzer" class="board" style="display:none">
-  <%= link_to "BUZZ BUZZ", game_buzz_path(current_game), method: :patch %>
+  <%= link_to "BUZZ BUZZ", game_buzz_path(current_game), method: :patch, remote: true %>
 </div>
 <div id="buzzed" class="board" style="display:none">
   <p>You have already answered</p>

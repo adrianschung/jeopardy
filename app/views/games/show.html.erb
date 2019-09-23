@@ -12,8 +12,8 @@
 </div>
 <% if current_game.first_user == current_user %>
   <% if current_game.status == "full" %>
-    <%= link_to 'Start', game_start_path(current_game), id: "start-button", method: :patch %>
+    <%= link_to 'Start', game_start_path(current_game), id: "start-button", method: :patch, remote: true %>
   <% end %>
-  <%= link_to 'Start', game_start_path(current_game), style:'display:none', id: "start-button", method: :patch %>
+  <%= link_to 'Start', game_start_path(current_game), style:'display:none', id: "start-button", method: :patch, remote: true %>
 <% end %>
 <input type="hidden" id="user" data-id="<%= current_user.id %>">
