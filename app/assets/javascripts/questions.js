@@ -27,12 +27,12 @@ function questionAnswered(id, questionId = '', points = undefined) {
   displayBoard(id);
 }
 
-function displayQuestion(category) {
+function displayQuestion(category, currentQuestion) {
   resetBoard();
-  $('#buzzer').show();
+  $('#question-box').show();
   $('#current-category').text(category).show();
   $('#question-box #current-question').show();
-  revealQuestion(moveCover);
+  showText('#current-question', currentQuestion, 0, 35)
 }
 
 function resetBuzzer(excludedIds = []) {
@@ -42,7 +42,6 @@ function resetBuzzer(excludedIds = []) {
   } else {
     $('#buzzer').show();
   }
-  moveCover();;
 }
 
 function resetAnswering(id = '', name = 'someone') {
@@ -58,19 +57,11 @@ function resetAnswering(id = '', name = 'someone') {
 
 function resetBoard() {
   $('.board').hide();
+  $('#current-question').text("");
 }
 
 function removeQuestion(questionId) {
   $('.question-' + questionId).html("");
-}
-
-function revealQuestion(callback) {
-  $('#current-question').width('0');
-  callback();
-}
-
-function moveCover() {
-  $('#current-question').animate({width:'100%'}, 5000);
 }
 
 function hideBuzzer() {
@@ -85,4 +76,13 @@ function updatePoints(pointsHash) {
   $.each(pointsHash, function(key, val) {
     $(".points-" + key).text(val);
   })
+}
+
+function showText(target, message, index, interval) {   
+  if (index < message.length) {
+    $(target).append(message[index++]);
+    setTimeout(function () { showText(target, message, index, interval); }, interval);
+  } else {
+    $('#buzzer').show();
+  }
 }

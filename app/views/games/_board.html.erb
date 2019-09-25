@@ -3,7 +3,11 @@
     <div class="category">
       <h2><%= category.name %></h2>
       <% category.questions.each do |question| %>
-        <p class="question-<%= question.id %>"><%= question.value %></p>
+        <p class="question-<%= question.id %>">
+          <% unless current_game.questions.include?(question) %>
+            <%= question.value %>
+          <% end %>
+        </p>
       <% end %>
     </div>
   <% end %>

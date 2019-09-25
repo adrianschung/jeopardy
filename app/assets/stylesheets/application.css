@@ -16,6 +16,6 @@
  *= require_self
  */
 
-body, html {
+html {
   width: 100%;
 }

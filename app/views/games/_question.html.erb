@@ -1,14 +1,14 @@
 <h2 id="current-category" class="board" style="display:<%= ["selected", "answering"].include?(current_game.status) ? 'block' : 'none'%>">
-  Category title
+  <%= current_game.question_id? ? current_game.question.category.name : "&nbsp" %>
 </h2>
 
 <div id="question-box" style="display:<%= ["selected", "answering"].include?(current_game.status) ? 'block' : 'none'%>">
-  <h3 id="current-question" class="hidden board">
+  <span id="current-question" class="hidden board">
     <%= current_game.question_id ? current_game.question.description : "&nbsp" %>
-  </h3>
+  </span>
 </div>
 
-<div id="answer-form" class="board" style="display:<%= current_game.answerer_id == current_user.id ? 'block' : 'none' %>">
+<div id="answer-form" class="board" style="display:<%= current_game.answerer_id == current_user.id && current_game.status == "answering" ? 'block' : 'none' %>">
   <%= form_tag game_answer_path(current_game), method: :patch, remote: true do %>
     <%= collection_select :game, :answer, Answer.all, :id, :description, {include_blank: ''}, {style:"width:500px;"} %>
     <%= submit_tag :Submit, data: { disable_with: false } %>

@@ -3,7 +3,7 @@ categories = [{title: "Food and Drink", clues:{
   'Water buffalo milk (delicious on its own!) is used to make this cheese & Italy exports 40,000 tons a year of the stuff': 'mozzarella',
   'This fast food chain with more than 17,000 stores worldwide dropped its full name in 1991 & began using an abbreviation': 'KFC',
   'For purists, the blue agave from Jalisco state produces the best of this product': 'tequila',
-  'This aromatic herb essential to Bearnaise sauce has a sweet flavor similar to licorice or anise	tarragon': '1000'}
+  'This aromatic herb essential to Bearnaise sauce has a sweet flavor similar to licorice or anise': 'tarragon'}
 },
 {title: "3 Letter Words", clues:{
   'A solemn promise; you might take one "of silence" (but not now!)': 'vow',
